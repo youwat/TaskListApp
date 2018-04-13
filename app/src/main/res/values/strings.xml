@@ -2,4 +2,5 @@
     <string name="app_name">My Application</string>
     <string name="textview">ここにタスクを表示</string>
     <string name="textView">デフォルト</string>
+    <string name="no_data_available">no data available</string>
 </resources>

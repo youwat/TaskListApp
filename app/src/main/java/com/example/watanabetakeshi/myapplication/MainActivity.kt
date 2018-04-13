@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         val listView = findViewById<ListView>(R.id.taskListView)
         // データの準備
         val taskList = TaskList()
-        // Adapterの設定 - ArrayAdapter
-        taskList.setAdapter(this, listView);
+        listView.emptyView = findViewById(R.id.emptyView)
+        taskList.init(this, listView)
     }
 }

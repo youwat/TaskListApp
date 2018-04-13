@@ -5,36 +5,44 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.SimpleAdapter
+import java.util.*
 
 
-class TaskList
+class TaskList()
 {
-    var list = mutableListOf<Task>()
+    // Viewと紐付けるデータ配列
+    var list = ArrayList<Map<String, String>>()
+
     var createId = fun(): () -> Int {
         var id = 0
         return {id++}
     }()
 
-    fun init() {
+    private var activityContext: Context ?= null
+
+    private var taskListView: ListView ?= null
+
+    fun init(context: Context, taskListView : ListView) {
         // テストデータいくつか。
-        list.add(Task(id = createId(), title = "test1", body = "本文1"))
-        list.add(Task(id = createId(), title = "test2", body = "本文2"))
-        list.add(Task(id = createId(), title = "test3", body = "本文3"))
+        list.add(mapOf("id" to "1", "taskName" to "hogehoge"))
+        list.add(mapOf("id" to "2", "taskName" to "hogehoge2"))
+        list.add(mapOf("id" to "3", "taskName" to "hogehoge3"))
+
+        this.activityContext = context
+        this.taskListView = taskListView
+        setAdapter()
     }
 
-    fun setAdapter(context : Context, taskListView : ListView) {
-        var items = getItemList()
-        var adapter = ArrayAdapter<String>(
-                context, R.layout.task_list_item, items
-        )
-        taskListView.adapter = adapter
+    /**
+     * アダプタをListViewにセットする
+     */
+    fun setAdapter() {
+        // アダプターの生成
+        var adapter = SimpleAdapter(
+                activityContext, list,
+                R.layout.task_list_item, arrayOf("id", "taskName"), intArrayOf(R.id.taskId, R.id.taskName))
+        taskListView?.adapter = adapter // ロジック的にNULLになることはない
     }
 
-    private fun getItemList(): ArrayList<String> {
-        var items = ArrayList<String>()
-        for(i in 0..30) {
-            items.add("items-$i")
-        }
-        return items
-    }
 }

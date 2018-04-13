@@ -1,12 +1,12 @@
 package com.example.watanabetakeshi.myapplication
-
 import java.util.Date
 
-class Task(
+data class Task (
         var id: Int?,
-        var title: String,
-        var body: String,
-        var contextId: Int ?= null,
-        var tagIdList: Set<Int> ?= null,
-        var startDate: Date ?= null,
-        var dueDate: Date ?= null)
+        var taskName: String,
+        var contextId: Int = 0,
+        var startDate: Date = Date(),
+        var dueDate: Date = Date(),
+        var endDate: Date = Date(),
+        var playTime: Int ?= null
+)
