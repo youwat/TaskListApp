@@ -23,15 +23,22 @@ class TaskList()
 
     private var taskListView: ListView ?= null
 
-    fun init(context: Context, taskListView : ListView) {
-        // テストデータいくつか。
-        list.add(mapOf("id" to "1", "taskName" to "hogehoge"))
-        list.add(mapOf("id" to "2", "taskName" to "hogehoge2"))
-        list.add(mapOf("id" to "3", "taskName" to "hogehoge3"))
-
+    fun init(context: Context, taskListView : ListView)
+    {
+        // 必要なクラスの定義
         this.activityContext = context
         this.taskListView = taskListView
+        // ローカルDBのデータを取得する
+        setFromLoacalData()
+        // アダプターを設定
         setAdapter()
+    }
+
+    fun setFromLoacalData() {
+        // TODO: debug テストデータいくつか。
+        for(i in 1..30) {
+            list.add(mapOf("id" to "${i}", "taskName" to "hogehoge${i}"))
+        }
     }
 
     /**
@@ -43,6 +50,11 @@ class TaskList()
                 activityContext, list,
                 R.layout.task_list_item, arrayOf("id", "taskName"), intArrayOf(R.id.taskId, R.id.taskName))
         taskListView?.adapter = adapter // ロジック的にNULLになることはない
+    }
+
+    fun add() {
+        list.add(mapOf("id" to "1", "taskName" to "add"))
+        taskListView?.invalidateViews()
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.watanabetakeshi.myapplication
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,5 +18,10 @@ class MainActivity : AppCompatActivity() {
         val taskList = TaskList()
         listView.emptyView = findViewById(R.id.emptyView)
         taskList.init(this, listView)
+
+        // ボタン押したらListViewに追加
+        findViewById<Button>(R.id.addButton).setOnClickListener({
+            taskList.add()
+        })
     }
 }
