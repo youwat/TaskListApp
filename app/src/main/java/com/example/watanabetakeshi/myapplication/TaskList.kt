@@ -9,7 +9,7 @@ import android.widget.SimpleAdapter
 import java.util.*
 
 
-class TaskList()
+class TaskList(var activityContext : Context, var taskListView : ListView)
 {
     // Viewと紐付けるデータ配列
     var list = ArrayList<Map<String, String>>()
@@ -18,16 +18,7 @@ class TaskList()
         var id = 0
         return {id++}
     }()
-
-    private var activityContext: Context ?= null
-
-    private var taskListView: ListView ?= null
-
-    fun init(context: Context, taskListView : ListView)
-    {
-        // 必要なクラスの定義
-        this.activityContext = context
-        this.taskListView = taskListView
+    init {
         // ローカルDBのデータを取得する
         setFromLoacalData()
         // アダプターを設定
@@ -37,7 +28,8 @@ class TaskList()
     fun setFromLoacalData() {
         // TODO: debug テストデータいくつか。
         for(i in 1..30) {
-            list.add(mapOf("id" to "${i}", "taskName" to "hogehoge${i}"))
+            val addMap = mapOf("id" to "${i}", "taskName" to "hogehoge${i}")
+            list.add(addMap)
         }
     }
 
@@ -46,15 +38,18 @@ class TaskList()
      */
     fun setAdapter() {
         // アダプターの生成
-        var adapter = SimpleAdapter(
+        val adapter = SimpleAdapter(
                 activityContext, list,
-                R.layout.task_list_item, arrayOf("id", "taskName"), intArrayOf(R.id.taskId, R.id.taskName))
-        taskListView?.adapter = adapter // ロジック的にNULLになることはない
+                R.layout.task_list_item, arrayOf("taskName"), intArrayOf(R.id.taskName))
+        taskListView.adapter = adapter // ロジック的にNULLになることはない
     }
 
-    fun add() {
-        list.add(mapOf("id" to "1", "taskName" to "add"))
-        taskListView?.invalidateViews()
+    fun add(taskName: String, checked: Boolean) {
+        list.add(mapOf("taskName" to "add"))
+        taskListView.invalidateViews()
     }
 
+    fun changeCheckBox(taskId: Int, checked: Boolean)
+    {
+    }
 }
