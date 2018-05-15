@@ -28,15 +28,15 @@ class MainActivity : AppCompatActivity() {
         listView = findViewById<ListView>(R.id.taskListView)
         taskList = Tasks(this, listView)
         // listView.emptyView = findViewById(R.id.emptyView)
-        listView!!.setOnItemClickListener {parent, view, position, id ->
-            if(taskList!!.isChecked(position)) {
+        listView!!.setOnItemClickListener { parent, view, position, id ->
+            if (taskList!!.isChecked(position)) {
                 taskList!!.unChecked(position)
             } else {
                 taskList!!.checked(position)
             }
         }
-        listView!!.setOnItemLongClickListener{parent, view, position, id ->
-            if(taskList!!.isChecked(position)) {
+        listView!!.setOnItemLongClickListener { parent, view, position, id ->
+            if (taskList!!.isChecked(position)) {
                 taskList!!.delete(position)
             } else {
                 taskList!!.unChecked(position)
@@ -50,16 +50,16 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.addButton)
         button.setOnClickListener {
             // インテントは空
-            try{
+            try {
                 startActivityForResult(Intent(this, AddTaskActivity::class.java),
                         CommonContract.Code.ADD_TASK)
-            } catch( e: Throwable) {
+            } catch (e: Throwable) {
                 Log.d("myDebug", e.message)
+
             }
+            //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         }
-        //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
-
-
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d(TAG, "追加アクティビティから戻ってきたIntentを受信")
         when (requestCode) {
