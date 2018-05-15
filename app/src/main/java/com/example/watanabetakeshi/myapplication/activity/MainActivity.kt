@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        // 新規アクティビティ呼び出しのテストのために作った。
+        // 同じ画面に追加テキストボックスを作る予定
         /////////// タスク追加ボタン
         val button = findViewById<Button>(R.id.addButton)
         button.setOnClickListener {
@@ -56,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
-    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d(TAG, "追加アクティビティから戻ってきたIntentを受信")

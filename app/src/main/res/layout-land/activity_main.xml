@@ -17,13 +17,11 @@
         <ListView
             android:id="@+id/taskListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:choiceMode="singleChoice" />
-        <TextView
-            android:text="@string/no_data_available"
-            android:id="@+id/emptyView"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
     </LinearLayout>
 
 

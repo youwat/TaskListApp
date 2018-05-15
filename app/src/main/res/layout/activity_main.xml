@@ -7,25 +7,27 @@
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/taskListViewItem"
+    <ListView
+        android:id="@+id/taskListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="20"
+        android:choiceMode="singleChoice" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:orientation="horizontal">
-
-        <ListView
-            android:id="@+id/taskListView"
-            android:layout_width="match_parent"
+        <EditText
+            android:layout_width="100pt"
             android:layout_height="match_parent"
-            android:choiceMode="singleChoice" />
-        <TextView
-            android:text="@string/no_data_available"
-            android:id="@+id/emptyView"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
+            />
+        <Button
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:text="追加"/>
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,6 +46,5 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="コンテキスト" />
-
     </LinearLayout>
 </LinearLayout>
