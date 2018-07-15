@@ -16,21 +16,6 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="horizontal">
-        <EditText
-            android:layout_width="100pt"
-            android:layout_height="match_parent"
-            />
-        <Button
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:text="追加"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >

@@ -1,14 +1,15 @@
 package com.example.watanabetakeshi.myapplication.adapter
 
 import android.content.Context;
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
+import android.text.TextPaint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.watanabetakeshi.myapplication.R
 
@@ -20,6 +21,7 @@ public class TaskListViewAdapter : ArrayAdapter<TaskListViewItem>
     private val mInflater : LayoutInflater
     private val checkOnDrawable : Drawable
     private val checkOffDrawable : Drawable
+    private var defaultTaskTextPaintFlags : Int? = null
 
     /**
      * コンストラクタ
@@ -58,8 +60,20 @@ public class TaskListViewAdapter : ArrayAdapter<TaskListViewItem>
         val checkDrawable = if(item.checkBoxState) checkOnDrawable else checkOffDrawable
         val checkboxImage = view.findViewById<ImageView>(R.id.checkBoxImage)
         checkboxImage.setImageDrawable(checkDrawable)
+
         // タスク名を設定
-        view.findViewById<TextView>(R.id.taskName).text = item.name
+        val taskText = view.findViewById<TextView>(R.id.taskName)
+        val paint : TextPaint = taskText.paint
+        taskText.text = item.name
+        // デフォルトのスタイルを保持するため、1レコード目にpaintFlagsを取得/保持する
+        // もっといい方法ないかな・・・ｗ
+        if(defaultTaskTextPaintFlags == null) defaultTaskTextPaintFlags = taskText.paintFlags
+        // チェック済みの場合打ち消し線
+        if(item.checkBoxState) {
+            paint.flags = taskText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        } else {
+            paint.flags = defaultTaskTextPaintFlags as Int
+        }
         return view
     }
 }

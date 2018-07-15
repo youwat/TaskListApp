@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:text="@string/textView"
-    android:textSize="24sp"
     android:orientation="horizontal"
->
+    android:text="@string/textView"
+    android:textSize="24sp">
 
     <ImageView
         android:id="@+id/checkBoxImage"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:paddingRight="5dp"
         android:layout_gravity="center_vertical"
+        android:paddingRight="5dp"
         app:srcCompat="@android:drawable/checkbox_off_background" />
+
     <TextView
         android:id="@+id/taskName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:layout_gravity="center_vertical"
+        android:autoText="false"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="タスク名"
         android:textSize="20sp" />
 </LinearLayout>
