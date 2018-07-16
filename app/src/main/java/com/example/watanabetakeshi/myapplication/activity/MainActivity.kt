@@ -12,17 +12,14 @@ import com.example.watanabetakeshi.myapplication.Tasks
 import com.example.watanabetakeshi.myapplication.contract.CommonContract
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
 import android.support.v4.content.ContextCompat
 import android.location.LocationManager
-import android.location.LocationProvider
-import android.provider.Settings
 
 
 class MainActivity : AppCompatActivity()
 {
     var locationManager: LocationManager? = null
+    var location : TaskLocation? = null
 
 
     val LOG_TAG = "MainActivity"
@@ -82,8 +79,7 @@ class MainActivity : AppCompatActivity()
                 startActivityForResult(Intent(this, AddTaskActivity::class.java),
                         CommonContract.Code.ADD_TASK)
             } catch (e: Throwable) {
-                Log.d("myDebug", e.message)
-
+                Log.e("setOnClickListener", e.message)
             }
             //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         }
@@ -96,48 +92,9 @@ class MainActivity : AppCompatActivity()
             return
         }
 
-        locationStart()
-    }
-
-    private fun locationStart()
-    {
-        // LocationManager インスタンス生成
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        // 権限がない場合付与するようにダイアログを表示
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1000)
-            Log.d("location", "checkSelfPermission false")
-            return
-        }
-
-        locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 2000, 50.0f, object : LocationListener{
-            // 現在地がアップデートされた時
-            override fun onLocationChanged(location: Location?) {
-                gv.latitude = location?.getLatitude() // 緯度
-                gv.longtude = location?.getLongitude() // 経度
-                Log.d("location", "update : (${gv.latitude}, ${gv.longtude}")
-            }
-
-            // ロケーションステータスが変更された
-            // TODO: よくわかってないので後で調べる
-            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                when (status) {
-                    LocationProvider.AVAILABLE ->
-                        Log.d("location", "LocationProvider.AVAILABLE")
-                    LocationProvider.OUT_OF_SERVICE ->
-                        Log.d("location", "LocationProvider.OUT_OF_SERVICE")
-                    LocationProvider.TEMPORARILY_UNAVAILABLE ->
-                        Log.d("location", "LocationProvider.TEMPORARILY_UNAVAILABLE")
-                }
-            }
-
-            // TODO: なんだっけこれ
-            override fun onProviderEnabled(provider: String?) { }
-            override fun onProviderDisabled(provider: String?) { }
-        })
+        // Location関係
+        location = TaskLocation(this, this, getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+        location?.locationStart()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
