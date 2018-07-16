@@ -17,6 +17,7 @@ import android.location.LocationListener
 import android.support.v4.content.ContextCompat
 import android.location.LocationManager
 import android.location.LocationProvider
+import android.provider.Settings
 
 
 class MainActivity : AppCompatActivity()
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity()
     private var _taskList : Tasks? = null
     private var _listView : ListView? = null
     private val REQUEST_CODE = 1
+    private val gv : GlobalVariable = GlobalVariable()
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
@@ -92,41 +94,47 @@ class MainActivity : AppCompatActivity()
                     Manifest.permission.ACCESS_FINE_LOCATION
             ), REQUEST_CODE)
             return
-        } else {
         }
-        // TODO: ためしにGPS
+
         locationStart()
     }
 
-    fun locationStart()
+    private fun locationStart()
     {
         // LocationManager インスタンス生成
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+        // 権限がない場合付与するようにダイアログを表示
         if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1000)
-
-            Log.d("debug", "checkSelfPermission false")
+            Log.d("location", "checkSelfPermission false")
             return
         }
-        locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 1000, 50.0f, object : LocationListener{
+
+        locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 2000, 50.0f, object : LocationListener{
+            // 現在地がアップデートされた時
             override fun onLocationChanged(location: Location?) {
-                val str1 = "Latitude:" + location?.getLatitude() // 緯度
-                val str2 = "Longtude:" + location?.getLongitude() // 経度
-                Toast.makeText(applicationContext, str1 + " " + str2, Toast.LENGTH_SHORT).show()
+                gv.latitude = location?.getLatitude() // 緯度
+                gv.longtude = location?.getLongitude() // 経度
+                Log.d("location", "update : (${gv.latitude}, ${gv.longtude}")
             }
+
+            // ロケーションステータスが変更された
+            // TODO: よくわかってないので後で調べる
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
                 when (status) {
                     LocationProvider.AVAILABLE ->
-                        Log.d("debug", "LocationProvider.AVAILABLE")
+                        Log.d("location", "LocationProvider.AVAILABLE")
                     LocationProvider.OUT_OF_SERVICE ->
-                        Log.d("debug", "LocationProvider.OUT_OF_SERVICE")
+                        Log.d("location", "LocationProvider.OUT_OF_SERVICE")
                     LocationProvider.TEMPORARILY_UNAVAILABLE ->
-                        Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE")
+                        Log.d("location", "LocationProvider.TEMPORARILY_UNAVAILABLE")
                 }
             }
+
+            // TODO: なんだっけこれ
             override fun onProviderEnabled(provider: String?) { }
             override fun onProviderDisabled(provider: String?) { }
         })
