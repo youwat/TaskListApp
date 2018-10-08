@@ -3,4 +3,6 @@
     <string name="textview">ここにタスクを表示</string>
     <string name="textView">デフォルト</string>
     <string name="no_data_available">no data available</string>
+    <string name="main_change_list_button_text">タスクリスト切替</string>
+    <string name="main_add_button_text">追加</string>
 </resources>

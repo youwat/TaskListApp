@@ -35,9 +35,7 @@ class TaskLocation(val activity : AppCompatActivity, val context : Context, val 
                 longtude = location?.getLongitude() // 経度
                 Log.d("location", "update : (${latitude}, ${longtude}")
             }
-
             // ロケーションステータスが変更された
-            // TODO: よくわかってないので後で調べる
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
                 when (status) {
                     LocationProvider.AVAILABLE ->
@@ -48,9 +46,9 @@ class TaskLocation(val activity : AppCompatActivity, val context : Context, val 
                         Log.d("location", "LocationProvider.TEMPORARILY_UNAVAILABLE")
                 }
             }
-
-            // TODO: なんだっけこれ
+            // LocationProviderが有効になった場合に呼び出される
             override fun onProviderEnabled(provider: String?) { }
+            // LocationProviderが無効になった場合に呼び出される
             override fun onProviderDisabled(provider: String?) { }
         })
     }

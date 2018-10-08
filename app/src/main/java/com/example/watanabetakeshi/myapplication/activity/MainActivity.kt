@@ -16,30 +16,14 @@ import android.support.v4.content.ContextCompat
 import android.location.LocationManager
 
 
-class MainActivity : AppCompatActivity()
+class MainActivity() : AppCompatActivity()
 {
-    var locationManager: LocationManager? = null
-    var location : TaskLocation? = null
-
-
+    // このクラスでのログのタグ
     val LOG_TAG = "MainActivity"
-
+    // タスクを格納するクラスインスタンス
     private var _taskList : Tasks? = null
+    // タスクリストのビュークラス
     private var _listView : ListView? = null
-    private val REQUEST_CODE = 1
-    private val gv : GlobalVariable = GlobalVariable()
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            REQUEST_CODE -> {
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(LOG_TAG, "ok")
-                } else {
-                    Log.d(LOG_TAG, grantResults.toString())
-                }
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,26 +32,30 @@ class MainActivity : AppCompatActivity()
         //_/_/_/_/_/_/_/_/_/_/_/_/_/_/ コンポーネントにイベントをはる_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         //////////// タスクリスト
         Log.d(LOG_TAG, "タスクリストの初期データの準備")
-        val listView = findViewById<ListView>(R.id.taskListView)
-        val taskList = Tasks(this, listView)
-        // listView.emptyView = findViewById(R.id.emptyView)
-        listView.setOnItemClickListener { parent, view, position, id ->
-            if (taskList.isChecked(position)) {
-                taskList.unChecked(position)
-            } else {
-                taskList.checked(position)
+
+        val (listView, taskList) = fun():Pair<ListView, Tasks>{
+            val listView = findViewById<ListView>(R.id.taskListView)
+            val taskList = Tasks(this, listView)
+            // listView.emptyView = findViewById(R.id.emptyView)
+            listView.setOnItemClickListener { parent, view, position, id ->
+                if (taskList.isChecked(position)) {
+                    taskList.unChecked(position)
+                } else {
+                    taskList.checked(position)
+                }
             }
-        }
-        listView.setOnItemLongClickListener { parent, view, position, id ->
-            if (taskList.isChecked(position)) {
-                taskList.delete(position)
-            } else {
-                taskList.unChecked(position)
+            listView.setOnItemLongClickListener { parent, view, position, id ->
+                if (taskList.isChecked(position)) {
+                    taskList.delete(position)
+                } else {
+                    taskList.unChecked(position)
+                }
+                true
             }
-            true
-        }
-        this._listView = listView
-        this._taskList = taskList
+            return Pair(listView, taskList)
+        }()
+        _listView = listView
+        _taskList = taskList
 
         // 新規アクティビティ呼び出しのテストのために作った。
         // 同じ画面に追加テキストボックスを作る予定
@@ -83,29 +71,23 @@ class MainActivity : AppCompatActivity()
             }
             //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         }
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            ), REQUEST_CODE)
-            return
-        }
-
-        // Location関係
-        location = TaskLocation(this, this, getSystemService(Context.LOCATION_SERVICE) as LocationManager)
-        location?.locationStart()
     }
 
+    // 投げたインテントの戻り値を処理する
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d(LOG_TAG, "追加アクティビティから戻ってきたIntentを受信")
         when (requestCode) {
+            // タスク追加ボタンから
             CommonContract.Code.ADD_TASK -> {
                 when (resultCode) {
+                    // 追加OKボタン
                     RESULT_OK -> {
-                        val taskName = data!!.getStringExtra("taskName")
-                        if(taskName != null) _taskList!!.addAndRefresh(taskName, false)
+                        val taskName = data?.getStringExtra("taskName")
+                        if(taskName != null) {
+                            _taskList?.addAndRefresh(taskName, false)
+                        }
                     }
+                // タスク追加ボタンからの追加キャンセルボタン
                     RESULT_CANCELED -> {
                         Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show()
                     }
