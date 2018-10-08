@@ -1,7 +1,5 @@
 package com.example.watanabetakeshi.myapplication.activity
 
-import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,14 +8,17 @@ import android.widget.*
 import com.example.watanabetakeshi.myapplication.R
 import com.example.watanabetakeshi.myapplication.Tasks
 import com.example.watanabetakeshi.myapplication.contract.CommonContract
-import android.support.v4.app.ActivityCompat
-import android.content.pm.PackageManager
-import android.support.v4.content.ContextCompat
-import android.location.LocationManager
+import android.view.ContextMenu
+import android.view.View
 
 
 class MainActivity() : AppCompatActivity()
 {
+    data class MenuId(
+        val MOVE : Int = 0,
+        val DELETE : Int = 1
+    );
+
     // このクラスでのログのタグ
     val LOG_TAG = "MainActivity"
     // タスクを格納するクラスインスタンス
@@ -47,13 +48,19 @@ class MainActivity() : AppCompatActivity()
             listView.setOnItemLongClickListener { parent, view, position, id ->
                 if (taskList.isChecked(position)) {
                     taskList.delete(position)
+                    // チェックしている場合は、コンテキストメニューは表示させないため残りの処理を行わない(true)
+                    true
                 } else {
-                    taskList.unChecked(position)
+                    // チェックしていない場合は、コンテキストメニューを表示するため残りの処理を行う(false)
+                    false
                 }
-                true
             }
             return Pair(listView, taskList)
         }()
+
+        registerForContextMenu(listView)
+
+        // 作成したlistViewオブジェクト、taskListオブジェクトをインスタンス変数に。
         _listView = listView
         _taskList = taskList
 
@@ -71,6 +78,14 @@ class MainActivity() : AppCompatActivity()
             }
             //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         }
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+
+        menu?.setHeaderTitle("タスク操作メニュー")
+        menu?.add(0, MenuId().MOVE, 0, "タスクリストに移動")
+        menu?.add(0, MenuId().DELETE, 1, "タスクを削除")
     }
 
     // 投げたインテントの戻り値を処理する
